@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { fetchCategories } from '../../store/categorySlice';
 import './Navbar.scss';
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const { data: categories } = useSelector((state) => state.category);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, []);
+
   return (
     <nav className='navbar'>
       <div className='navbar-content'>
@@ -33,17 +43,32 @@ const Navbar = () => {
 
         <div className='navbar-bottom bg-regal-blue'>
           <div className='container flex flex-between'>
-            <ul className='nav-links flex'>
-              <button className='navbar-hide-btn text-white'>
+            <ul
+              className={`nav-links flex ${
+                isSidebarOpen ? 'show-nav-links' : ''
+              }`}>
+              <button
+                className='navbar-hide-btn text-white'
+                type='button'
+                onClick={() => setIsSidebarOpen(false)}>
                 <i className='fas fa-times'></i>
               </button>
-              <li>
-                <Link className='nav-link text-white' to='/'>
-                  Demos
-                </Link>
-              </li>
+
+              {categories.map((category) => (
+                <li key={category.id}>
+                  <Link
+                    className='nav-link text-white'
+                    to={`/category/${category.id}`}
+                    onClick={() => setIsSidebarOpen(false)}>
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
-            <button className='navbar-show-btn text-gold' type='button'>
+            <button
+              className='navbar-show-btn text-gold'
+              type='button'
+              onClick={() => setIsSidebarOpen(true)}>
               <i className='fas fa-bars'></i>
             </button>
           </div>

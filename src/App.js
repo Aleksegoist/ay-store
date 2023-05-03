@@ -3,21 +3,25 @@ import './App.scss';
 //pages
 import { Cart, Category, Home } from './pages/index';
 //components
+import { Provider } from 'react-redux';
 import Footer from './components/Footer/Footer';
 import Navbar from './components/Navbar/Navbar';
+import store from './store/store';
 
 function App() {
   return (
     <div className='App'>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/category/:id' element={<Category />} />
-          <Route path='/cart' element={<Cart />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/category/:id' element={<Category />} />
+            <Route path='/cart' element={<Cart />} />
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </Provider>
     </div>
   );
 }
